@@ -168,21 +168,21 @@ def show_posts():
     if request.method == 'GET' and request.args.get('id'):
         blog_id = request.args.get('id')
         blog = Blog.query.get(blog_id)
-        user_id = blog.owner_id
-        user = User.query.get(user_id)
+        owner_id = blog.owner_id
+        user = User.query.get(owner_id)
         return render_template('singleuser.html', title='Blogz', user=user, blog=blog)
 
     # displays all blog posts for an individual user
     if request.method == 'GET' and request.args.get('userID'):
-        user_id = request.args.get('userID')
-        user = User.query.get(user_id)
+        owner_id = request.args.get('userID')
+        user = User.query.get(owner_id)
         user_blogs = Blog.query.filter_by(owner_id=user_id).all()
-        return render_template('singleuser.html', title='Blogz', user=user, user_blogs=user_blogs)
+        return render_template('posts.html', title='Blogz', user=user, user_blogs=user_blogs)
 
     # displays all blog posts
     if request.method == 'GET' or request.method == 'POST':
         blogs = Blog.query.all()
-        return render_template('post.html', title='Blogz', blogs=blogs)
+        return render_template('posts.html', title='Blogz', blogs=blogs)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_blog():
