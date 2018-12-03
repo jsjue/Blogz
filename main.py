@@ -48,7 +48,7 @@ def require_login():
         return redirect('/login')
 
 
-@app.route('/')
+@app.route('/home')
 def index():
     """displays all registered users of Blogz"""
 
@@ -69,12 +69,12 @@ def login():
         if user and user.password == password:
             session['username'] = username
             flash("Successfully logged in!", 'logged_in')
-            print(session)
+            #print(session)
             return redirect('/newpost')
         # if username in database but password invalid:
         elif user and not user.password == password:
             flash('Invalid password', 'invalid_password')
-            print(session)
+            #print(session)
             return redirect('/login')
         # if username not in database:
         else:
@@ -141,7 +141,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
-            return redirect('/signup')
+            return redirect('/newpost')
 
         # if username is already in database (i.e. duplicate user):
         else:
@@ -156,7 +156,7 @@ def logout():
     del session['username']
     return redirect('/blog')
 
-@app.route('/addblog', methods=['POST', 'GET'])
+@app.route('/blog', methods=['POST', 'GET'])
 def show_posts():
     """displays blog posts: single, single-user, and all"""
 
@@ -178,7 +178,7 @@ def show_posts():
     # displays all blog posts
     if request.method == 'GET' or request.method == 'POST':
         blogs = Blog.query.all()
-        return render_template('singleuser.html', title='Blogz', blogs=blogs)
+        return render_template('post.html', title='Blogz', blogs=blogs)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_blog():
@@ -199,12 +199,12 @@ def add_blog():
         # if blog title is missing, render error
         if not blog_title:
             title_error = error
-            return render_template('add_blog.html', title="Build A Blog!", title_error=title_error, blog_body=blog_body)
+            return render_template('add_blog.html', title="Build A Blog", title_error=title_error, blog_body=blog_body)
 
         # if blog body is missing, render error
         if not blog_body:
             body_error = error
-            return render_template('add_blog.html', title="Build A Blog!", body_error=body_error, blog_title=blog_title)
+            return render_template('add_blog.html', title="Build A Blog", body_error=body_error, blog_title=blog_title)
 
         # if no errors are generated, create new blog post
         if not title_error and not body_error:
@@ -212,7 +212,7 @@ def add_blog():
             db.session.add(new_blog)
             db.session.commit()
             blog_id = new_blog.id
-    return redirect("/blog?id={}".format(blog_id))
+    return redirect("/home?id={}".format(blog_id))
 
 if __name__ == '__main__':
     app.run()
