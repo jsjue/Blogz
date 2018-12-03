@@ -43,7 +43,7 @@ class User(db.Model):
 def require_login():
     """specifies routes user is allowed to see without being logged in"""
 
-    allowed_routes = ['login', 'signup', 'show_posts', 'index', 'static']
+    allowed_routes = ['login', 'signup', 'posts', 'index', 'static', 'blog']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
@@ -68,7 +68,7 @@ def login():
         # if username in database and password matches entered password, log user in
         if user and user.password == password:
             session['username'] = username
-            flash("Successfully logged in!", 'logged_in')
+            flash("Successfully logged in", 'logged_in')
             #print(session)
             return redirect('/newpost')
         # if username in database but password invalid:
@@ -157,6 +157,10 @@ def logout():
     return redirect('/blog')
 
 @app.route('/blog', methods=['POST', 'GET'])
+def blog():
+    blogs = Blog.query.filter_by().all()
+    return render_template('post.html',pgtitle="Blog Posts",blogs=blogs) 
+
 def show_posts():
     """displays blog posts: single, single-user, and all"""
 
