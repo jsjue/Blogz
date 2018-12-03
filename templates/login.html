@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<html>
+  <head>
+    <title>Build a Blog (Blogz) - login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Please login</h1>
+      <br>
+      <p>If you do not have an account, you may <a href="/signup">register</a>for one.</p>
+      <form action="/login" method="POST">
+        <input type="text" placeholder="Username" name="username" value="{{request.form.username }}">
+        {% if form.username.errors %}
+            {% for error in form.username.errors %}
+                <p class="error message">{{error}}</p>
+            {% endfor %}
+        {% endif %}
+        {% if form.password.errors %}
+            {% for error in form.password.errors %}
+                <p class="error message">{{error}}</p>
+            {% endfor %}
+        {% endif %}
+
+        <input type="password" placeholder="Password" name="password" value="{{request.form.password }}">"
+        <input class="btn-primary" type="submit" value="Login">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+    <div class="form">
+        {{form.username.label}}
+        {{form.username}}
+    </div>
+    <div class="form">
+        {{form.password.label}}
+        {{form.password}}
+    </div>
+  </body>
+</html>
+{% endblock %}
