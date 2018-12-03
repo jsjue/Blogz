@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
-''''from models import Blog, User'''
+''''from models import User'''
 '''from forms import SignupForm, LoginForm, Blogform'''
 
 
@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['DEBUG'] = True
                                         
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogsvc:couch@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://blogz:chair@localhost:8889/build-a-blog'
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
@@ -141,7 +141,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             session['username'] = username
-            return redirect('/newpost')
+            return redirect('/signup')
 
         # if username is already in database (i.e. duplicate user):
         else:
@@ -156,7 +156,7 @@ def logout():
     del session['username']
     return redirect('/blog')
 
-@app.route('/add_blog', methods=['POST', 'GET'])
+@app.route('/addblog', methods=['POST', 'GET'])
 def show_posts():
     """displays blog posts: single, single-user, and all"""
 
@@ -166,7 +166,7 @@ def show_posts():
         blog = Blog.query.get(blog_id)
         user_id = blog.owner_id
         user = User.query.get(user_id)
-        return render_template('single_blog.html', title='Blogz', user=user, blog=blog)
+        return render_template('singleuser.html', title='Blogz', user=user, blog=blog)
 
     # displays all blog posts for an individual user
     if request.method == 'GET' and request.args.get('userID'):
@@ -186,7 +186,7 @@ def add_blog():
 
     # displays the add a post form
     if request.method == 'GET':
-        return render_template('new_blog.html', title="Blogz")
+        return render_template('add_blog.html', title="Blogz")
 
     # form handler for new posts
     if request.method == 'POST':
@@ -199,12 +199,12 @@ def add_blog():
         # if blog title is missing, render error
         if not blog_title:
             title_error = error
-            return render_template('new_blog.html', title="Build A Blog!", title_error=title_error, blog_body=blog_body)
+            return render_template('add_blog.html', title="Build A Blog!", title_error=title_error, blog_body=blog_body)
 
         # if blog body is missing, render error
         if not blog_body:
             body_error = error
-            return render_template('new_blog.html', title="Build A Blog!", body_error=body_error, blog_title=blog_title)
+            return render_template('add_blog.html', title="Build A Blog!", body_error=body_error, blog_title=blog_title)
 
         # if no errors are generated, create new blog post
         if not title_error and not body_error:
