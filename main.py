@@ -154,14 +154,13 @@ def signup():
 def logout():
     """logs user out; deletes user data from session"""
     del session['username']
-    return redirect('/blog')
+    return redirect('/home')
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
-    blogs = Blog.query.filter_by().all()
-    return render_template('post.html',pgtitle="Blog Posts",blogs=blogs) 
 
-def show_posts():
+
+#def show_posts():
     """displays blog posts: single, single-user, and all"""
 
     # displays single blog post
@@ -176,13 +175,12 @@ def show_posts():
     if request.method == 'GET' and request.args.get('userID'):
         owner_id = request.args.get('userID')
         user = User.query.get(owner_id)
-        user_blogs = Blog.query.filter_by(owner_id=user_id).all()
+        user_blogs = Blog.query.filter_by(owner_id=owner_id).all()
         return render_template('posts.html', title='Blogz', user=user, user_blogs=user_blogs)
 
     # displays all blog posts
-    if request.method == 'GET' or request.method == 'POST':
-        blogs = Blog.query.all()
-        return render_template('posts.html', title='Blogz', blogs=blogs)
+    blogs = Blog.query.filter_by().all()
+    return render_template('post.html',pgtitle="Blog Posts",blogs=blogs) 
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_blog():
@@ -216,7 +214,7 @@ def add_blog():
             db.session.add(new_blog)
             db.session.commit()
             blog_id = new_blog.id
-    return redirect("/home?id={}".format(blog_id))
+    return redirect("/blog?id={}".format(blog_id))
 
 if __name__ == '__main__':
     app.run()
