@@ -214,7 +214,7 @@ def add_blog():
             db.session.add(new_blog)
             db.session.commit()
             blog_id = new_blog.id
-    return redirect("/blog?id={}".format(blog_id))
+            return redirect("/blog?id={}".format(blog_id))
 
 if __name__ == '__main__':
     app.run()

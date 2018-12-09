@@ -6,14 +6,14 @@
             <h4>{{ user.username }}</h4>
 
                 <ul>
-                    {% for blog in blogs %}
+                    
                         <li>
-                            <p><a href="{{ url_for('blog', id=blog.id) }}">{{ blog.name }}</a></p>
+                            <p><a href="{{ url_for('blog', id=blog.id) }}">{{ blog.title }}</a></p>
                             <ul>
-                                <li class="blog-post-content">{{ blog.post }}</li>
+                                <li class="blog-post-content">{{ blog.body }}</li>
                             </ul>
                         </li>
-                    {% endfor %}
+                    
                 </ul>
             
 
